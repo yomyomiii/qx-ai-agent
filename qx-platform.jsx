@@ -413,7 +413,7 @@ function SimulationSection(props) {
   var [compareCircuit, setCompareCircuit] = useState(null);
   var [cmpSim, setCmpSim] = useState(null);
   var [picking, setPicking] = useState(false);
-  var [open, setOpen] = useState(false);
+  var [open, setOpen] = useState(true);
   var hasAny = circuit.some(function(r){return r.some(function(g){return !!g;});});
 
   useEffect(function(){setSim(runSim(circuit));}, [circuit]);
@@ -538,7 +538,7 @@ function TutorialNavBar(props) {
         {isLast ? (
           <div style={{background:t.GRN+"18",border:"1px solid "+t.GRN+"55",color:t.GRN,padding:"5px 14px",borderRadius:7,fontSize:12,fontWeight:700,flexShrink:0}}>✓ 마지막 레슨</div>
         ) : (
-          <button onClick={props.onNext} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"5px 16px",borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>다음 단계 →</button>
+          <button onClick={props.onNext} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"5px 16px",borderRadius:7,fontSize:12,fontWeight:600,cursor:"pointer",flexShrink:0}}>다음 단계 →</button>
         )}
       </div>
     </div>
@@ -641,7 +641,7 @@ function PracticeTab(props) {
           var msg = result===100?"완벽합니다! 회로가 정확히 일치해요.":result>=80?"훌륭해요! 거의 정확합니다.":result>=50?"아쉬워요. 회로를 조금 더 수정해보세요.":"많이 다릅니다. 힌트를 참고해보세요.";
           return <div style={{borderRadius:8,padding:"10px 14px",background:c+"0f",border:"1px solid "+c+"44",color:c,fontSize:12,fontWeight:700,textAlign:"center"}}>{result}/100점 · {msg}</div>;
         })()}
-        <button onClick={submit} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",borderRadius:8,padding:"8px 0",fontSize:12,fontWeight:700,cursor:"pointer"}}>제출하기</button>
+        <button onClick={submit} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",borderRadius:8,padding:"8px 0",fontSize:12,fontWeight:600,cursor:"pointer"}}>제출하기</button>
       </div>
     );
   }
@@ -860,7 +860,7 @@ function TutorialsTab(props) {
                                 </span>
                               )}
                               {canQuiz&&(
-                                <button onClick={function(e){e.stopPropagation();onStartQuiz(tut,lesson,idx);}} style={{background:qr&&qr.attempted?t.isDark?t.CARD:t.CARDH:"transparent",border:"1px solid "+(qr&&qr.attempted?t.BDR:t.AMB+"66"),color:qr&&qr.attempted?t.T3:t.AMB,padding:"1px 8px",borderRadius:8,fontSize:9.5,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap",transition:"all .15s"}}>
+                                <button onClick={function(e){e.stopPropagation();onStartQuiz(tut,lesson,idx);}} style={{background:qr&&qr.attempted?t.isDark?t.CARD:t.CARDH:"transparent",border:"1px solid "+(qr&&qr.attempted?t.BDR:t.AMB+"66"),color:qr&&qr.attempted?t.T3:t.AMB,padding:"1px 8px",borderRadius:8,fontSize:9.5,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all .15s"}}>
                                   📝 {qr&&qr.attempted?"재시험":"퀴즈"}
                                 </button>
                               )}
@@ -868,7 +868,7 @@ function TutorialsTab(props) {
                           );
                         })()}
                         {isNext && !isLessonActive && (
-                          <button onClick={function(){onStartLesson(tut,lesson,idx);}} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"3px 9px",borderRadius:6,fontSize:10.5,fontWeight:700,cursor:"pointer",flexShrink:0}}>시작 →</button>
+                          <button onClick={function(){onStartLesson(tut,lesson,idx);}} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"3px 9px",borderRadius:6,fontSize:10.5,fontWeight:600,cursor:"pointer",flexShrink:0}}>시작 →</button>
                         )}
                         {isLessonActive && <span style={{color:t.PUR,fontSize:10,fontWeight:600,flexShrink:0}}>진행 중</span>}
                       </div>
@@ -879,7 +879,7 @@ function TutorialsTab(props) {
                   <button onClick={function(){
                     var targetIdx = (isActive && activeLessonIdx!==null) ? activeLessonIdx : Math.max(lessons.findIndex(function(l){return !l.done;}),0);
                     onStartLesson(tut,lessons[targetIdx],targetIdx);
-                  }} style={{width:"100%",padding:"7px",borderRadius:8,fontSize:11.5,fontWeight:700,cursor:"pointer",background:isActive?t.PUR+"20":"linear-gradient(135deg,"+t.ACC+"22,"+t.PUR+"22)",border:isActive?"1px solid "+t.PUR+"55":"1px dashed "+t.ACC+"55",color:isActive?t.PUR:t.ACC,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+                  }} style={{width:"100%",padding:"7px",borderRadius:8,fontSize:11.5,fontWeight:600,cursor:"pointer",background:isActive?t.PUR+"20":"linear-gradient(135deg,"+t.ACC+"22,"+t.PUR+"22)",border:isActive?"1px solid "+t.PUR+"55":"1px dashed "+t.ACC+"55",color:isActive?t.PUR:t.ACC,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
                     {isActive?"⟳ 현재 레슨 다시 시작":"✦ AI 가이드 시작"}
                   </button>
                 </div>
@@ -1006,7 +1006,7 @@ function CollabTab(props) {
 
   /* ── Note detail page ── */
   if (detailNote) {
-    var TYPE_META_D={"note":{label:"직접 메모",icon:"✏️",clr:t.GRN},"ai-msg":{label:"AI 응답",icon:"🔖",clr:t.PUR},"summary":{label:"대화 요약",icon:"📝",clr:t.ACC},"mindmap":{label:"마인드맵",icon:"🗺️",clr:t.AMB},"circuit-analysis":{label:"회로 분석",icon:"🔬",clr:t.GRN},"circuit-compare":{label:"회로 비교",icon:"📊",clr:t.PUR},"experiment":{label:"실험 보고서",icon:"📋",clr:t.RED}};
+    var TYPE_META_D={"note":{label:"직접 메모",icon:"✏️",clr:t.GRN},"ai-msg":{label:"AI 응답",icon:"🔖",clr:t.PUR},"summary":{label:"대화 요약",icon:"📝",clr:t.ACC},"glossary":{label:"용어 정리",icon:"📖",clr:t.AMB},"mindmap":{label:"마인드맵",icon:"🗺️",clr:t.PUR},"circuit-analysis":{label:"회로 분석",icon:"🔬",clr:t.GRN},"circuit-compare":{label:"회로 비교",icon:"📊",clr:t.PUR},"experiment":{label:"실험 보고서",icon:"📋",clr:t.RED}};
     var dn=detailNote; var dmm=TYPE_META_D[dn.type]||TYPE_META_D["note"];
     return (
       <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
@@ -1024,7 +1024,7 @@ function CollabTab(props) {
             <span style={{background:dmm.clr+"15",border:"1px solid "+dmm.clr+"33",color:dmm.clr,padding:"1px 7px",borderRadius:10,fontSize:10,fontWeight:600}}>{dmm.icon} {dmm.label}</span>
           </div>
           {onSendToChat && (
-            <button onClick={function(){onSendToChat(dn.content+" — 이에 대해 더 자세히 설명해줘");}} style={{width:"100%",padding:"6px",background:"linear-gradient(135deg,"+t.ACC+"22,"+t.PUR+"22)",border:"1px dashed "+t.ACC+"55",borderRadius:7,color:t.ACC,fontSize:11.5,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+            <button onClick={function(){onSendToChat(dn.content+" — 이에 대해 더 자세히 설명해줘");}} style={{width:"100%",padding:"6px",background:"linear-gradient(135deg,"+t.ACC+"22,"+t.PUR+"22)",border:"1px dashed "+t.ACC+"55",borderRadius:7,color:t.ACC,fontSize:11.5,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
               ✦ AI에게 물어보기
             </button>
           )}
@@ -1055,7 +1055,7 @@ function CollabTab(props) {
             var c = {author:"홍길동",av:"😊",time:"방금",text:noteReplyText};
             setMemoComments(function(prev){var updated=Object.assign({},prev);updated[key]=(updated[key]||[]).concat([c]);return updated;});
             setNoteReplyText("");
-          }} disabled={!noteReplyText.trim()} style={{width:"100%",padding:"7px",background:noteReplyText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,border:"none",borderRadius:8,color:noteReplyText.trim()?"#fff":t.T3,fontSize:12,fontWeight:700,cursor:"pointer"}}>
+          }} disabled={!noteReplyText.trim()} style={{width:"100%",padding:"7px",background:noteReplyText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,border:"none",borderRadius:8,color:noteReplyText.trim()?"#fff":t.T3,fontSize:12,fontWeight:600,cursor:"pointer"}}>
             코멘트 등록
           </button>
         </div>
@@ -1084,7 +1084,7 @@ function CollabTab(props) {
             {post.tags.map(function(tg){return <span key={tg} style={{background:t.ACC+"15",border:"1px solid "+t.ACC+"33",color:t.ACC,padding:"1px 7px",borderRadius:10,fontSize:10,fontWeight:600}}>#{tg}</span>;})}
           </div>
           {onSendToChat && (
-            <button onClick={function(){onSendToChat(post.question);}} style={{width:"100%",padding:"6px",background:"linear-gradient(135deg,"+t.ACC+"22,"+t.PUR+"22)",border:"1px dashed "+t.ACC+"55",borderRadius:7,color:t.ACC,fontSize:11.5,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+            <button onClick={function(){onSendToChat(post.question);}} style={{width:"100%",padding:"6px",background:"linear-gradient(135deg,"+t.ACC+"22,"+t.PUR+"22)",border:"1px dashed "+t.ACC+"55",borderRadius:7,color:t.ACC,fontSize:11.5,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
               ✦ AI에게 물어보기
             </button>
           )}
@@ -1110,7 +1110,7 @@ function CollabTab(props) {
         {/* Reply form */}
         <div style={{flexShrink:0}}>
           <textarea value={replyText} onChange={function(e){setReplyText(e.target.value);}} placeholder="코멘트를 작성하세요..." rows={3} style={{width:"100%",background:t.SURF,border:"1px solid "+t.BDRH,borderRadius:8,color:t.T1,padding:"8px 10px",fontSize:11.5,outline:"none",resize:"none",fontFamily:"inherit",boxSizing:"border-box",marginBottom:6}}/>
-          <button onClick={submitAnswer} disabled={!replyText.trim()} style={{width:"100%",padding:"7px",background:replyText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,border:"none",borderRadius:8,color:replyText.trim()?"#fff":t.T3,fontSize:12,fontWeight:700,cursor:"pointer"}}>
+          <button onClick={submitAnswer} disabled={!replyText.trim()} style={{width:"100%",padding:"7px",background:replyText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,border:"none",borderRadius:8,color:replyText.trim()?"#fff":t.T3,fontSize:12,fontWeight:600,cursor:"pointer"}}>
             코멘트 등록
           </button>
         </div>
@@ -1137,7 +1137,7 @@ function CollabTab(props) {
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
           {(function(){
-            var TYPE_META={"note":{label:"직접 메모",icon:"✏️",clr:t.GRN},"ai-msg":{label:"AI 응답",icon:"🔖",clr:t.PUR},"summary":{label:"대화 요약",icon:"📝",clr:t.ACC},"mindmap":{label:"마인드맵",icon:"🗺️",clr:t.AMB},"circuit-analysis":{label:"회로 분석",icon:"🔬",clr:t.GRN},"circuit-compare":{label:"회로 비교",icon:"📊",clr:t.PUR},"experiment":{label:"실험 보고서",icon:"📋",clr:t.RED}};
+            var TYPE_META={"note":{label:"직접 메모",icon:"✏️",clr:t.GRN},"ai-msg":{label:"AI 응답",icon:"🔖",clr:t.PUR},"summary":{label:"대화 요약",icon:"📝",clr:t.ACC},"glossary":{label:"용어 정리",icon:"📖",clr:t.AMB},"mindmap":{label:"마인드맵",icon:"🗺️",clr:t.PUR},"circuit-analysis":{label:"회로 분석",icon:"🔬",clr:t.GRN},"circuit-compare":{label:"회로 비교",icon:"📊",clr:t.PUR},"experiment":{label:"실험 보고서",icon:"📋",clr:t.RED}};
             var allMemos = (memoSort==="oldest"?sharedNotes.slice().reverse():sharedNotes).filter(function(m){return !memoSearch.trim()||(m.content+""+(m.title||"")).toLowerCase().indexOf(memoSearch.trim().toLowerCase())>=0;});
             var myCards = allMemos.map(function(m,i){
               var mm=TYPE_META[m.type]||TYPE_META["ai-msg"];
@@ -1205,7 +1205,7 @@ function CollabTab(props) {
         <div style={{background:t.isDark?t.CARD:t.CARDH,border:"1px solid "+t.BDRH,borderRadius:9,padding:11}}>
           <textarea value={qText} onChange={function(e){setQText(e.target.value);}} placeholder="개념이나 회로에 대해 팀원들에게 질문해보세요..." rows={4} style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:6,color:t.T1,padding:"6px 9px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box",marginBottom:7,resize:"vertical",fontFamily:"inherit"}}/>
           <input value={qTags} onChange={function(e){setQTags(e.target.value);}} placeholder="태그 (쉼표 구분: Bell, CNOT)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:6,color:t.T1,padding:"5px 9px",fontSize:11,outline:"none",width:"100%",boxSizing:"border-box",marginBottom:7}}/>
-          <button onClick={submitQuestion} disabled={!qText.trim()} style={{width:"100%",padding:"6px",background:qText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,border:"none",borderRadius:7,color:qText.trim()?"#fff":t.T3,fontSize:12,fontWeight:700,cursor:"pointer"}}>
+          <button onClick={submitQuestion} disabled={!qText.trim()} style={{width:"100%",padding:"6px",background:qText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,border:"none",borderRadius:7,color:qText.trim()?"#fff":t.T3,fontSize:12,fontWeight:600,cursor:"pointer"}}>
             질문 올리기
           </button>
         </div>
@@ -1467,11 +1467,18 @@ function LeftPanel(props) {
                   <span style={{flex:1}}/>
                   <button onClick={function(){setSources(function(p){return p.filter(function(s){return s.id!==srcPage.id;});});setSrcPage(null);}} style={{background:"transparent",border:"1px solid "+t.RED+"55",color:t.RED,padding:"3px 9px",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer"}}>삭제</button>
                 </div>
-                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10,flexShrink:0}}>
+                <div style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:10,flexShrink:0}}>
                   <span style={{fontSize:18}}>{srcPage.icon}</span>
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{color:t.T1,fontWeight:700,fontSize:12.5,lineHeight:1.3}}>{srcPage.title}</div>
-                    {srcPage.author && <div style={{color:t.T3,fontSize:10,marginTop:2}}>{srcPage.av} {srcPage.author}{srcPage.savedAt?" · "+srcPage.savedAt:srcPage.time?" · "+srcPage.time:""}</div>}
+                    <div style={{color:t.T1,fontWeight:700,fontSize:12.5,lineHeight:1.3,marginBottom:6}}>{srcPage.title}</div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:4,alignItems:"center"}}>
+                      {(function(){
+                        var isCircuit = srcPage.type==="ref-circuit"||srcPage.circuit;
+                        var tag = isCircuit ? {label:"회로",clr:t.ACC} : srcPage.av==="🔗" ? {label:"링크",clr:t.T3} : srcPage.av==="📁"||srcPage.icon==="📕" ? {label:"파일",clr:t.AMB} : {label:"문서",clr:t.T3};
+                        return <span style={{background:tag.clr+"12",border:"1px solid "+tag.clr+"33",color:tag.clr,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600}}>{tag.label}</span>;
+                      })()}
+                      {(srcPage.tags||[]).map(function(tag,i){return <span key={i} style={{background:t.ACC+"12",border:"1px solid "+t.ACC+"33",color:t.ACC,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600}}>#{tag}</span>;})}
+                    </div>
                   </div>
                 </div>
                 {srcPage.circuit && (
@@ -1496,7 +1503,7 @@ function LeftPanel(props) {
                 <div style={{flex:1,overflowY:"auto",background:t.isDark?t.BG:t.CARDH,border:"1px solid "+t.BDR,borderRadius:8,padding:10,marginBottom:10}}>
                   <p style={{color:t.T2,fontSize:11.5,lineHeight:1.8,margin:0}}>{srcPage.content}</p>
                 </div>
-                <button onClick={function(){toggleSource(srcPage);}} style={{width:"100%",padding:"8px",borderRadius:9,background:srcPageChecked?t.ACC+"18":"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",border:srcPageChecked?"1px solid "+t.ACC+"55":"none",color:srcPageChecked?t.ACC:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+                <button onClick={function(){toggleSource(srcPage);}} style={{width:"100%",padding:"8px",borderRadius:9,background:srcPageChecked?t.ACC+"18":"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",border:srcPageChecked?"1px solid "+t.ACC+"55":"none",color:srcPageChecked?t.ACC:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
                   <span style={{width:16,height:16,borderRadius:4,background:srcPageChecked?"transparent":"rgba(255,255,255,.25)",border:srcPageChecked?"2px solid "+t.ACC:"2px solid rgba(255,255,255,.6)",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:900,color:srcPageChecked?t.ACC:"#fff"}}>{srcPageChecked?"✓":""}</span>
                   {srcPageChecked?"컨텍스트 적용 중 — 해제":"컨텍스트에 추가"}
                 </button>
@@ -1546,7 +1553,7 @@ function LeftPanel(props) {
                             <input value={newUrl} onChange={function(e){setNewUrl(e.target.value);}} placeholder="https://arxiv.org/abs/..." style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"8px 10px",fontSize:12,outline:"none",width:"100%",boxSizing:"border-box"}}/>
                             <input value={newTitle} onChange={function(e){setNewTitle(e.target.value);}} placeholder="제목 (선택)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"7px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box"}}/>
                             <input value={newTags} onChange={function(e){setNewTags(e.target.value);}} placeholder="태그 (쉼표로 구분)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"7px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box"}}/>
-                            <button onClick={addFromUrl} disabled={!newUrl.trim()} style={{background:newUrl.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:newUrl.trim()?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer"}}>추가하기</button>
+                            <button onClick={addFromUrl} disabled={!newUrl.trim()} style={{background:newUrl.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:newUrl.trim()?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:600,cursor:"pointer"}}>추가하기</button>
                           </div>
                         )}
                         {srcAddMode==="text" && (
@@ -1554,7 +1561,7 @@ function LeftPanel(props) {
                             <input value={newTitle} onChange={function(e){setNewTitle(e.target.value);}} placeholder="자료 제목" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"8px 10px",fontSize:12,outline:"none",width:"100%",boxSizing:"border-box"}}/>
                             <textarea value={newText} onChange={function(e){setNewText(e.target.value);}} placeholder="논문, 노트, 강의 내용 등을 붙여넣기..." rows={5} style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"8px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box",resize:"vertical",fontFamily:"inherit"}}/>
                             <input value={newTags} onChange={function(e){setNewTags(e.target.value);}} placeholder="태그 (쉼표로 구분)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"7px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box"}}/>
-                            <button onClick={addFromText} disabled={!newTitle.trim()||!newText.trim()} style={{background:(newTitle.trim()&&newText.trim())?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:(newTitle.trim()&&newText.trim())?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer"}}>추가하기</button>
+                            <button onClick={addFromText} disabled={!newTitle.trim()||!newText.trim()} style={{background:(newTitle.trim()&&newText.trim())?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:(newTitle.trim()&&newText.trim())?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:600,cursor:"pointer"}}>추가하기</button>
                           </div>
                         )}
                       </div>
@@ -1615,7 +1622,7 @@ function LeftPanel(props) {
                             <input value={newUrl} onChange={function(e){setNewUrl(e.target.value);}} placeholder="https://..." style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"8px 10px",fontSize:12,outline:"none",width:"100%",boxSizing:"border-box"}}/>
                             <input value={newTitle} onChange={function(e){setNewTitle(e.target.value);}} placeholder="제목 (선택)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"7px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box"}}/>
                             <input value={newTags} onChange={function(e){setNewTags(e.target.value);}} placeholder="태그 (쉼표로 구분)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"7px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box"}}/>
-                            <button onClick={addCircuitFromUrl} disabled={!newUrl.trim()} style={{background:newUrl.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:newUrl.trim()?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer"}}>추가하기</button>
+                            <button onClick={addCircuitFromUrl} disabled={!newUrl.trim()} style={{background:newUrl.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:newUrl.trim()?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:600,cursor:"pointer"}}>추가하기</button>
                           </div>
                         )}
                         {srcAddMode==="circ-text" && (
@@ -1623,7 +1630,7 @@ function LeftPanel(props) {
                             <input value={newTitle} onChange={function(e){setNewTitle(e.target.value);}} placeholder="회로 이름" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"8px 10px",fontSize:12,outline:"none",width:"100%",boxSizing:"border-box"}}/>
                             <textarea value={newText} onChange={function(e){setNewText(e.target.value);}} placeholder={"from qiskit import QuantumCircuit\nqc = QuantumCircuit(3)\nqc.h(0)\nqc.cx(0, 1)"} rows={5} style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"8px 10px",fontSize:11,outline:"none",width:"100%",boxSizing:"border-box",resize:"vertical",fontFamily:"monospace"}}/>
                             <input value={newTags} onChange={function(e){setNewTags(e.target.value);}} placeholder="태그 (쉼표로 구분)" style={{background:t.SURF,border:"1px solid "+t.BDR,borderRadius:7,color:t.T1,padding:"7px 10px",fontSize:11.5,outline:"none",width:"100%",boxSizing:"border-box"}}/>
-                            <button onClick={addCircuitFromText} disabled={!newTitle.trim()||!newText.trim()} style={{background:(newTitle.trim()&&newText.trim())?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:(newTitle.trim()&&newText.trim())?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer"}}>추가하기</button>
+                            <button onClick={addCircuitFromText} disabled={!newTitle.trim()||!newText.trim()} style={{background:(newTitle.trim()&&newText.trim())?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:(newTitle.trim()&&newText.trim())?"#fff":t.T3,border:"none",padding:"8px",borderRadius:7,fontSize:12,fontWeight:600,cursor:"pointer"}}>추가하기</button>
                           </div>
                         )}
                       </div>
@@ -1720,18 +1727,9 @@ function ChatCenter(props) {
   var endRef = useRef(null);
 
   var onSetCircuitSource = props.onSetCircuitSource;
-  var locateMsgId = props.locateMsgId;
-  var onClearLocate = props.onClearLocate;
   var msgElRefs = useRef({});
 
   useEffect(function() { if (endRef.current) endRef.current.scrollIntoView({behavior:"smooth"}); }, [msgs]);
-
-  useEffect(function() {
-    if (locateMsgId && msgElRefs.current[locateMsgId]) {
-      msgElRefs.current[locateMsgId].scrollIntoView({behavior:"smooth", block:"center"});
-      if (onClearLocate) onClearLocate();
-    }
-  }, [locateMsgId]);
 
   var onAddCircuit = props.onAddCircuit;
   var [savedCircuitMsgIds, setSavedCircuitMsgIds] = useState([]);
@@ -2161,7 +2159,7 @@ function RightCircuit(props) {
   var OUTPUT_LABELS={"summary":"대화 요약","mindmap":"개념 마인드맵","circuit-analysis":"회로 분석","circuit-compare":"회로 비교","experiment":"실험 보고서"};
   function generateOutput(type, ids) {
     if (type==="note") { setNoteOpen(true); setNoteText(""); setPendingAction(null); return; }
-    if (type==="summary"||type==="mindmap") {
+    if (type==="summary"||type==="mindmap"||type==="glossary") {
       setPendingAction(null);
     } else {
       setPendingAction(null); setSelectedIds([]);
@@ -2174,6 +2172,7 @@ function RightCircuit(props) {
     var msgCount=chatMsgs.filter(function(m){return m.role;}).length;
     if (type==="summary") { prompt="다음 학습 대화를 ## 대화 요약 제목으로 시작해 bullet(•) 5개 이내 핵심 요약:\n\n"+chatToText(chatMsgs); basis="전체 대화"; }
     else if (type==="mindmap") { prompt="다음 대화의 양자 컴퓨팅 핵심 개념을 ## 개념 마인드맵 제목으로 들여쓰기 텍스트 마인드맵 정리:\n\n"+chatToText(chatMsgs); basis="전체 대화"; }
+    else if (type==="glossary") { prompt="다음 대화에서 등장한 양자 컴퓨팅 용어를 ## 용어 정리 제목으로 시작해 각 용어를 **용어**: 설명 형식으로 정리해줘:\n\n"+chatToText(chatMsgs); basis="전체 대화"; }
     else if (type==="circuit-analysis") {
       var c1=circuits.find(function(c){return c.id===ids[0];});
       if (!c1) { setGenerating(null); return; }
@@ -2204,7 +2203,6 @@ function RightCircuit(props) {
 
   var circuitSource = props.circuitSource;
   var onSetCircuitSource = props.onSetCircuitSource;
-  var onLocateMsg = props.onLocateMsg;
   var onAskChat = props.onAskChat || function(){};
 
   function loadSample(fn, label) {
@@ -2252,33 +2250,29 @@ function RightCircuit(props) {
         {rightPage==="list" ? (
           <>
             <span style={{color:t.T1,fontWeight:600,fontSize:13}}>회로 에디터</span>
-            {circuits.length>0 && <span style={{background:t.ACC,color:"#fff",borderRadius:10,padding:"1px 7px",fontSize:10,fontWeight:700}}>{circuits.length}</span>}
-            <button onClick={function(){setCircuit(mkCkt());setEditingTitle("새 회로");setEditingCircuitId(null);setRightPage("editor");if(onSetCircuitSource)onSetCircuitSource(null);}} style={{marginLeft:"auto",background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"4px 12px",borderRadius:7,fontSize:11.5,fontWeight:700,cursor:"pointer"}}>+ 새 회로</button>
+            {circuits.length>0 && <span style={{background:t.ACC+"18",border:"1px solid "+t.ACC+"44",color:t.ACC,borderRadius:10,padding:"1px 7px",fontSize:10,fontWeight:700}}>{circuits.length}</span>}
+            <button onClick={function(){setCircuit(mkCkt());setEditingTitle("회로 작성");setEditingCircuitId(null);setRightPage("editor");if(onSetCircuitSource)onSetCircuitSource({type:"manual"});}} style={{marginLeft:"auto",background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"0 10px",borderRadius:7,fontSize:10.5,fontWeight:500,cursor:"pointer",height:20}}>+ 회로 작성</button>
           </>
         ) : (
           <>
             <button onClick={function(){setRightPage("list");setSavingOpen(false);}} style={{background:"transparent",border:"none",color:t.ACC,fontSize:12,cursor:"pointer",padding:0,fontWeight:600,display:"flex",alignItems:"center",gap:3,flexShrink:0}}>← 목록</button>
             <div style={{width:1,height:18,background:t.BDR,flexShrink:0}}/>
-            <span style={{color:t.T2,fontSize:12,fontWeight:500,flex:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{editingTitle||"회로 에디터"}</span>
-            {circuitSource && (function(){
-              var cfg = circuitSource.type==="ai"
-                ? {icon:"🔖", label:"AI 응답", clr:t.PUR}
-                : circuitSource.type==="sample"
-                ? {icon:"⚛", label:circuitSource.label||"샘플", clr:t.ACC}
-                : {icon:"✏️", label:"직접 작성", clr:t.T3};
-              return (
-                <div style={{display:"flex",alignItems:"center",gap:4,flexShrink:0}}>
-                  <span style={{background:cfg.clr+"12",border:"1px solid "+cfg.clr+"33",color:cfg.clr,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600,whiteSpace:"nowrap"}}>{cfg.icon} {cfg.label}</span>
-                  {circuitSource.type==="ai" && onLocateMsg && (
-                    <button onClick={function(){onLocateMsg(circuitSource.msgId);}} style={{background:"transparent",border:"1px solid "+t.BDR,color:t.T2,padding:"2px 7px",borderRadius:6,fontSize:9.5,cursor:"pointer",whiteSpace:"nowrap"}}>채팅 보기</button>
-                  )}
-                </div>
-              );
-            })()}
+            <div style={{display:"flex",alignItems:"center",gap:5,flex:1,minWidth:0}}>
+              <span style={{color:t.T2,fontSize:12,fontWeight:500,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{editingTitle||"회로 에디터"}</span>
+              {circuitSource && (function(){
+                var cfg = circuitSource.type==="ai"
+                  ? {icon:"🔖", label:"AI 응답", clr:t.PUR}
+                  : circuitSource.type==="sample"
+                  ? {icon:"⚛", label:circuitSource.label||"샘플", clr:t.ACC}
+                  : {icon:"✏️", label:"직접 작성", clr:t.T3};
+                return <span style={{background:cfg.clr+"12",border:"1px solid "+cfg.clr+"33",color:cfg.clr,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600,whiteSpace:"nowrap",flexShrink:0}}>{cfg.icon} {cfg.label}</span>;
+              })()}
+            </div>
+
             {editingCircuitId && onDeleteCircuit && (
               <button onClick={function(){onDeleteCircuit(editingCircuitId);setRightPage("list");setEditingCircuitId(null);}} style={{background:"transparent",border:"1px solid "+t.RED+"55",color:t.RED,padding:"3px 9px",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer",flexShrink:0}}>삭제</button>
             )}
-            <button onClick={onSubmit} style={{background:hasCircuit?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":"transparent",color:hasCircuit?"#fff":t.T3,border:hasCircuit?"none":"1px solid "+t.BDR,padding:"4px 12px",borderRadius:7,fontSize:11.5,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:3,flexShrink:0}}>
+            <button onClick={onSubmit} style={{background:hasCircuit?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":"transparent",color:hasCircuit?"#fff":t.T3,border:hasCircuit?"none":"1px solid "+t.BDR,padding:"0 10px",borderRadius:7,fontSize:10.5,fontWeight:500,cursor:"pointer",display:"flex",alignItems:"center",gap:3,flexShrink:0,height:20}}>
               <span>⚡</span>제출
             </button>
           </>
@@ -2311,14 +2305,17 @@ function RightCircuit(props) {
             var cDep = 0; if(c.circuit) c.circuit[0].forEach(function(cell,i){if(c.circuit.some(function(r){return !!r[i];}))cDep=i+1;});
             var usedQ = c.circuit ? c.circuit.filter(function(r){return r.some(Boolean);}).length : 0;
             return (
-              <div key={c.id} onClick={function(){setCircuit(c.circuit);setEditingTitle(c.title);setEditingCircuitId(c.id);setRightPage("editor");onSimTrigger();}} style={{background:t.isDark?t.CARD:"transparent",border:"1px solid "+t.BDR,borderRadius:10,padding:"10px 12px",cursor:"pointer",display:"flex",flexDirection:"column",gap:6,transition:"border-color .15s",marginBottom:1}}>
+              <div key={c.id} onClick={function(){setCircuit(c.circuit);setEditingTitle(c.title);setEditingCircuitId(c.id);setRightPage("editor");onSimTrigger();if(onSetCircuitSource&&c.source)onSetCircuitSource(c.source);}} style={{background:t.isDark?t.CARD:"transparent",border:"1px solid "+t.BDR,borderRadius:10,padding:"10px 12px",cursor:"pointer",display:"flex",flexDirection:"column",gap:6,transition:"border-color .15s",marginBottom:1}}>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
                   <span style={{fontSize:14,flexShrink:0}}>⚛</span>
                   <span style={{flex:1,color:t.T1,fontSize:12,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{c.title}</span>
                   {c.source && (function(){
-                    var isAi = c.source.type==="ai";
-                    var clr = isAi ? t.PUR : t.T3;
-                    return <span style={{background:clr+"12",border:"1px solid "+clr+"33",color:clr,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600,flexShrink:0}}>{isAi?"🔖 AI 응답":"✏️ 직접 작성"}</span>;
+                    var cfg = c.source.type==="ai"
+                      ? {icon:"🔖", label:"AI 응답", clr:t.PUR}
+                      : c.source.type==="sample"
+                      ? {icon:"⚛", label:c.source.label||"샘플", clr:t.ACC}
+                      : {icon:"✏️", label:"직접 작성", clr:t.T3};
+                    return <span style={{background:cfg.clr+"12",border:"1px solid "+cfg.clr+"33",color:cfg.clr,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}>{cfg.icon} {cfg.label}</span>;
                   })()}
                   <span style={{color:t.T3,fontSize:11,flexShrink:0}}>›</span>
                 </div>
@@ -2466,7 +2463,7 @@ function RightCircuit(props) {
       {/* ── 상세 페이지 ── */}
       {memoPage ? (
         (function(){
-          var mMeta={"note":{label:"직접 메모",icon:"✏️",clr:t.GRN},"ai-msg":{label:"AI 응답",icon:"🔖",clr:t.PUR},"summary":{label:"대화 요약",icon:"📝",clr:t.ACC},"mindmap":{label:"개념 마인드맵",icon:"🗺️",clr:t.AMB},"circuit-analysis":{label:"회로 분석",icon:"🔬",clr:t.GRN},"circuit-compare":{label:"회로 비교",icon:"📊",clr:t.PUR},"experiment":{label:"실험 보고서",icon:"📋",clr:t.RED}};
+          var mMeta={"note":{label:"직접 메모",icon:"✏️",clr:t.GRN},"ai-msg":{label:"AI 응답",icon:"🔖",clr:t.PUR},"summary":{label:"대화 요약",icon:"📝",clr:t.ACC},"glossary":{label:"용어 정리",icon:"📖",clr:t.AMB},"mindmap":{label:"개념 마인드맵",icon:"🗺️",clr:t.PUR},"circuit-analysis":{label:"회로 분석",icon:"🔬",clr:t.GRN},"circuit-compare":{label:"회로 비교",icon:"📊",clr:t.PUR},"experiment":{label:"실험 보고서",icon:"📋",clr:t.RED}};
           var mm=mMeta[memoPage.type]||mMeta["ai-msg"];
           return (
             <div style={{display:"flex",flexDirection:"column",height:"100%",padding:14,boxSizing:"border-box"}}>
@@ -2498,10 +2495,11 @@ function RightCircuit(props) {
         <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
           <div style={{padding:"0 12px",minHeight:40,display:"flex",alignItems:"center",gap:8,flexShrink:0,borderBottom:"1px solid "+t.BDR}}>
             <button onClick={function(){setNoteOpen(false);setNoteText("");}} style={{background:"transparent",border:"none",color:t.ACC,fontSize:12,cursor:"pointer",padding:0,fontWeight:600,display:"flex",alignItems:"center",gap:3}}>← 뒤로</button>
+            <span style={{flex:1}}/>
+            <button onClick={function(){if(onAddNote&&noteText.trim()){onAddNote(noteText);setNoteText("");setNoteOpen(false);}}} disabled={!noteText.trim()} style={{background:"transparent",border:"none",color:noteText.trim()?t.ACC:t.T3,fontSize:12,cursor:noteText.trim()?"pointer":"default",padding:0,fontWeight:600,opacity:noteText.trim()?1:0.4,transition:"opacity .15s"}}>저장</button>
           </div>
           <div style={{flex:1,padding:"12px 10px",display:"flex",flexDirection:"column",gap:8}}>
             <textarea autoFocus value={noteText} onChange={function(e){setNoteText(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter"&&e.metaKey){e.preventDefault();if(onAddNote&&noteText.trim()){onAddNote(noteText);setNoteText("");setNoteOpen(false);}}}} placeholder="메모 작성..." style={{flex:1,width:"100%",background:t.isDark?t.BG:t.CARDH,border:"1px solid "+(noteText.trim()?t.BDRH:t.BDR),borderRadius:8,color:t.T1,padding:"10px 12px",fontSize:12,outline:"none",resize:"none",fontFamily:"inherit",lineHeight:1.7,boxSizing:"border-box"}}/>
-            <button onClick={function(){if(onAddNote&&noteText.trim()){onAddNote(noteText);setNoteText("");setNoteOpen(false);}}} disabled={!noteText.trim()} style={{background:noteText.trim()?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":"transparent",color:noteText.trim()?"#fff":t.T3,border:noteText.trim()?"none":"1px solid "+t.BDR,padding:"4px 12px",borderRadius:7,cursor:noteText.trim()?"pointer":"default",fontSize:11.5,fontWeight:700,transition:"all .18s",opacity:noteText.trim()?1:0.4,alignSelf:"flex-end"}}>📌 메모 저장</button>
           </div>
         </div>
       ) : (
@@ -2522,6 +2520,8 @@ function RightCircuit(props) {
             <>
               <span style={{color:t.T1,fontWeight:700,fontSize:12}}>내 노트</span>
               {savedMsgs.length>0 && <span style={{background:t.PUR+"18",border:"1px solid "+t.PUR+"44",color:t.PUR,padding:"1px 7px",borderRadius:10,fontSize:10,fontWeight:700}}>{savedMsgs.length}</span>}
+              <span style={{flex:1}}/>
+              <button onClick={function(){setNoteOpen(true);setNoteText("");setPendingAction(null);}} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"0 10px",borderRadius:7,fontSize:10.5,fontWeight:500,cursor:"pointer",height:20}}>+ 메모 작성</button>
             </>
           )}
         </div>
@@ -2556,7 +2556,7 @@ function RightCircuit(props) {
             <button onClick={function(){
               var ok=pendingAction==="circuit-compare"?selectedIds.length>=2:selectedIds.length===1;
               if(ok) generateOutput(pendingAction,selectedIds);
-            }} disabled={pendingAction==="circuit-compare"?selectedIds.length<2:selectedIds.length<1} style={{flexShrink:0,padding:"9px",borderRadius:8,border:"none",background:(pendingAction==="circuit-compare"?selectedIds.length>=2:selectedIds.length>=1)?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:(pendingAction==="circuit-compare"?selectedIds.length>=2:selectedIds.length>=1)?"#fff":t.T3,fontSize:12,fontWeight:700,cursor:"pointer",transition:"all .18s"}}>
+            }} disabled={pendingAction==="circuit-compare"?selectedIds.length<2:selectedIds.length<1} style={{flexShrink:0,padding:"9px",borderRadius:8,border:"none",background:(pendingAction==="circuit-compare"?selectedIds.length>=2:selectedIds.length>=1)?"linear-gradient(135deg,"+t.ACC+","+t.PUR+")":t.BDR,color:(pendingAction==="circuit-compare"?selectedIds.length>=2:selectedIds.length>=1)?"#fff":t.T3,fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .18s"}}>
               생성
             </button>
           </div>
@@ -2568,16 +2568,15 @@ function RightCircuit(props) {
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:4,padding:"6px 8px"}}>
               {[
                 {type:"summary",          label:"대화 요약",   icon:"📝",clr:t.ACC},
-                {type:"mindmap",          label:"마인드맵",    icon:"🗺️",clr:t.AMB},
-                {type:"experiment",       label:"실험 보고서", icon:"📋",clr:t.RED},
+                {type:"glossary",         label:"용어 정리",   icon:"📖",clr:t.AMB},
+                {type:"mindmap",          label:"마인드맵",    icon:"🗺️",clr:t.PUR},
                 {type:"circuit-analysis", label:"회로 분석",   icon:"🔬",clr:t.GRN},
-                {type:"circuit-compare",  label:"회로 비교",   icon:"📊",clr:t.PUR},
-                {type:"note",             label:"직접 메모",   icon:"✏️",clr:t.T2},
+                {type:"circuit-compare",  label:"회로 비교",   icon:"📊",clr:t.ACC},
+                {type:"experiment",       label:"실험 보고서", icon:"📋",clr:t.RED},
               ].map(function(a){
                 return (
                   <button key={a.type} onClick={function(){
-                    if (a.type==="note") { generateOutput("note"); return; }
-                    if (a.type==="summary"||a.type==="mindmap") { generateOutput(a.type,[]); return; }
+                    if (a.type==="summary"||a.type==="mindmap"||a.type==="glossary") { generateOutput(a.type,[]); return; }
                     setPendingAction(a.type); setSelectedIds([]);
                   }} disabled={!!generating} style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,padding:"7px 4px",borderRadius:8,border:"1px solid "+a.clr+"44",background:a.clr+"0D",color:a.clr,fontSize:10,fontWeight:600,cursor:generating?"default":"pointer",opacity:generating?0.5:1,transition:"all .15s",textAlign:"center",minHeight:44}}>
                     <span style={{fontSize:15}}>{a.icon}</span>
@@ -2592,7 +2591,7 @@ function RightCircuit(props) {
         {generating && (
           <div style={{flexShrink:0,padding:"6px 12px",background:t.ACC+"0A",borderBottom:"1px solid "+t.ACC+"22",display:"flex",alignItems:"center",gap:8}}>
             <span style={{fontSize:10,color:t.ACC,fontWeight:600}}>✦ 생성 중 —</span>
-            <span style={{fontSize:10,color:t.T2}}>{{summary:"대화 요약",mindmap:"개념 마인드맵","circuit-analysis":"회로 분석","circuit-compare":"회로 비교",experiment:"실험 보고서"}[generating]}</span>
+            <span style={{fontSize:10,color:t.T2}}>{{summary:"대화 요약",glossary:"용어 정리",mindmap:"개념 마인드맵","circuit-analysis":"회로 분석","circuit-compare":"회로 비교",experiment:"실험 보고서"}[generating]}</span>
           </div>
         )}
 
@@ -2608,7 +2607,8 @@ function RightCircuit(props) {
               "note":             {label:"직접 메모",    icon:"✏️",clr:t.GRN},
               "ai-msg":           {label:"AI 응답",      icon:"🔖",clr:t.PUR},
               "summary":          {label:"대화 요약",    icon:"📝",clr:t.ACC},
-              "mindmap":          {label:"개념 마인드맵",icon:"🗺️",clr:t.AMB},
+              "glossary":         {label:"용어 정리",    icon:"📖",clr:t.AMB},
+              "mindmap":          {label:"개념 마인드맵",icon:"🗺️",clr:t.PUR},
               "circuit-analysis": {label:"회로 분석",    icon:"🔬",clr:t.GRN},
               "circuit-compare":  {label:"회로 비교",    icon:"📊",clr:t.PUR},
               "experiment":       {label:"실험 보고서",  icon:"📋",clr:t.RED},
@@ -2700,7 +2700,7 @@ function QuizModal(props) {
         {err && (
           <div style={{textAlign:"center",padding:"32px 0"}}>
             <div style={{color:t.RED,fontSize:13,marginBottom:16}}>{err}</div>
-            <button onClick={function(){setFetchKey(function(k){return k+1;});}} style={{background:t.ACC,color:"#fff",border:"none",padding:"8px 20px",borderRadius:8,fontSize:12,fontWeight:700,cursor:"pointer"}}>다시 시도</button>
+            <button onClick={function(){setFetchKey(function(k){return k+1;});}} style={{background:t.ACC,color:"#fff",border:"none",padding:"8px 20px",borderRadius:8,fontSize:12,fontWeight:600,cursor:"pointer"}}>다시 시도</button>
           </div>
         )}
         {qs && !loading && (
@@ -2769,7 +2769,7 @@ function QuizModal(props) {
             {done && (
               <div style={{marginTop:16,display:"flex",gap:8}}>
                 <button onClick={onClose} style={{flex:1,padding:"10px",background:"transparent",border:"1px solid "+t.BDR,color:t.T2,borderRadius:9,fontSize:13,cursor:"pointer",fontWeight:600}}>닫기</button>
-                <button onClick={function(){setFetchKey(function(k){return k+1;});}} style={{flex:1,padding:"10px",background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",borderRadius:9,fontSize:13,fontWeight:700,cursor:"pointer"}}>🔄 다시 풀기</button>
+                <button onClick={function(){setFetchKey(function(k){return k+1;});}} style={{flex:1,padding:"10px",background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",borderRadius:9,fontSize:13,fontWeight:600,cursor:"pointer"}}>🔄 다시 풀기</button>
               </div>
             )}
           </>
@@ -2836,7 +2836,7 @@ function SubmitModal(props) {
         </div>
         <div style={{display:"flex",gap:10}}>
           <button onClick={props.onClose} style={{flex:1,background:"transparent",border:"1px solid "+t.BDR,color:t.T2,padding:"10px",borderRadius:9,fontSize:13,cursor:"pointer"}}>취소</button>
-          <button onClick={function(){setDone(true);}} style={{flex:2,background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"10px",borderRadius:9,fontSize:13,fontWeight:700,cursor:"pointer"}}>⚡ 제출하기</button>
+          <button onClick={function(){setDone(true);}} style={{flex:2,background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"10px",borderRadius:9,fontSize:13,fontWeight:600,cursor:"pointer"}}>⚡ 제출하기</button>
         </div>
       </div>
     </div>
@@ -2848,7 +2848,6 @@ export default function App() {
   var [isDark, setIsDark] = useState(false);
   var [circuit, setCircuit] = useState(mkCkt());
   var [circuitSource, setCircuitSource] = useState(null);
-  var [locateMsgId, setLocateMsgId] = useState(null);
 
   var [savedCircuits, setSavedCircuits] = useState(function() {
     var bellCkt = mkCkt(); bellCkt[0][0]="H"; bellCkt[1][1]="CX"; bellCkt[0][3]="M"; bellCkt[1][3]="M";
@@ -3026,25 +3025,22 @@ export default function App() {
     <ThemeCtx.Provider value={theme}>
       <div style={{display:"flex",flexDirection:"column",height:"100vh",background:t.BG,fontFamily:"'Pretendard','Inter','Helvetica Neue',system-ui,sans-serif",color:t.T1,overflow:"hidden",transition:"background .25s,color .25s"}}>
         <style>{"@import url('https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/static/pretendard.css');\n          *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}\n          ::-webkit-scrollbar{width:4px;height:4px;}\n          ::-webkit-scrollbar-track{background:transparent;}\n          ::-webkit-scrollbar-thumb{background:"+t.scrollThumb+";border-radius:2px;}\n          input,textarea,button{font-family:'Pretendard',inherit;}\n          @keyframes qBlink{0%,100%{opacity:.25}50%{opacity:1}}\n        "}</style>
-        <div style={{height:48,flexShrink:0,background:t.SURF,borderBottom:"1px solid "+t.BDR,display:"flex",alignItems:"center",padding:"0 16px",gap:12,transition:"background .25s"}}>
+        <div style={{height:40,flexShrink:0,background:t.SURF,borderBottom:"1px solid "+t.BDR,display:"flex",alignItems:"center",padding:"0 16px",gap:12,transition:"background .25s"}}>
           {/* Logo */}
           <div style={{display:"flex",alignItems:"center",gap:9,flexShrink:0}}>
-            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="15" cy="15" rx="13" ry="5" stroke={t.ACC} strokeWidth="1.4" fill="none" opacity=".9"/>
-              <ellipse cx="15" cy="15" rx="13" ry="5" stroke={t.PUR} strokeWidth="1.4" fill="none" opacity=".75" transform="rotate(60 15 15)"/>
-              <ellipse cx="15" cy="15" rx="13" ry="5" stroke={t.ACC} strokeWidth="1.4" fill="none" opacity=".55" transform="rotate(120 15 15)"/>
+            <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="15" cy="15" rx="13" ry="5" stroke={t.ACC} strokeWidth="2.2" fill="none" opacity=".9"/>
+              <ellipse cx="15" cy="15" rx="13" ry="5" stroke={t.PUR} strokeWidth="2.2" fill="none" opacity=".65" transform="rotate(60 15 15)"/>
+              <ellipse cx="15" cy="15" rx="13" ry="5" stroke={t.ACC} strokeWidth="2.2" fill="none" opacity=".45" transform="rotate(120 15 15)"/>
               <circle cx="15" cy="15" r="2.2" fill={t.ACC}/>
             </svg>
-            <div>
-              <div style={{fontSize:14,fontWeight:800,letterSpacing:"-.03em",color:t.T1}}>QX Platform</div>
-              <div style={{color:t.T3,fontSize:9,letterSpacing:".04em"}}>Quantum Computing Studio</div>
-            </div>
+            <div style={{fontSize:14,fontWeight:800,letterSpacing:"-.03em",color:t.T1}}>QX Platform</div>
           </div>
 
           {/* Active context pill */}
           <div style={{flex:1,display:"flex",alignItems:"center",gap:6,paddingLeft:8}}>
             {activeTutorial && (
-              <div style={{display:"flex",alignItems:"center",gap:6,background:t.PUR+"10",border:"1px solid "+t.PUR+"33",borderRadius:20,padding:"3px 12px 3px 8px"}}>
+              <div style={{display:"flex",alignItems:"center",gap:6,background:t.PUR+"18",border:"1px solid "+t.PUR+"44",borderRadius:20,padding:"3px 12px 3px 8px"}}>
                 <span style={{fontSize:11}}>📚</span>
                 <span style={{color:t.PUR,fontSize:11.5,fontWeight:600}}>{activeTutorial.title}</span>
                 {activeLessonIdx!==null && (
@@ -3056,7 +3052,7 @@ export default function App() {
               <div style={{display:"flex",alignItems:"center",gap:4}}>
                 {activeSources.slice(0,2).map(function(s) {
                   return (
-                    <span key={s.id} style={{background:t.ACC+"10",border:"1px solid "+t.ACC+"33",borderRadius:20,padding:"3px 10px",fontSize:11,color:t.ACC,fontWeight:500}}>
+                    <span key={s.id} style={{background:t.ACC+"18",border:"1px solid "+t.ACC+"44",borderRadius:20,padding:"3px 10px",fontSize:11,color:t.ACC,fontWeight:500}}>
                       {s.type==="doc"?"📄":"⚛"} {s.title.length>14?s.title.slice(0,14)+"…":s.title}
                     </span>
                   );
@@ -3068,21 +3064,18 @@ export default function App() {
 
           {/* Right controls */}
           <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
-            <button onClick={function(){setIsDark(function(d){return !d;});}} style={{width:30,height:30,borderRadius:8,cursor:"pointer",background:t.isDark?t.CARD:t.CARDH,border:"1px solid "+t.BDR,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>
+            <button onClick={function(){setIsDark(function(d){return !d;});}} style={{width:24,height:24,borderRadius:6,cursor:"pointer",background:t.isDark?t.CARD:t.CARDH,border:"1px solid "+t.BDR,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11}}>
               {isDark?"☀️":"🌙"}
             </button>
-            <div style={{width:1,height:22,background:t.BDR}}/>
-            <div style={{display:"flex",alignItems:"center",gap:7,cursor:"pointer"}}>
-              <div style={{width:30,height:30,borderRadius:8,background:"#f0f0f2",border:"1px solid "+t.BDR,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
-                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="15" cy="12" r="5.5" fill="#bbbcc8"/>
-                  <ellipse cx="15" cy="25" rx="10" ry="6.5" fill="#bbbcc8"/>
+            <div style={{width:1,height:16,background:t.BDR}}/>
+            <div style={{display:"flex",alignItems:"center",gap:6,cursor:"pointer"}}>
+              <div style={{width:22,height:22,borderRadius:6,background:t.isDark?t.CARD:t.CARDH,border:"1px solid "+t.BDR,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}>
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11" cy="9" r="4" fill={t.T3}/>
+                  <ellipse cx="11" cy="19" rx="7.5" ry="5" fill={t.T3}/>
                 </svg>
               </div>
-              <div style={{lineHeight:1.2}}>
-                <div style={{color:t.T1,fontSize:11.5,fontWeight:600}}>홍길동</div>
-                <div style={{color:t.T3,fontSize:9.5}}>연구원 · Lv.2</div>
-              </div>
+              <span style={{color:t.T1,fontSize:11.5,fontWeight:600}}>홍길동</span>
             </div>
           </div>
         </div>
@@ -3092,12 +3085,12 @@ export default function App() {
           <div onMouseDown={dragLeft} style={{width:6,flexShrink:0,cursor:"col-resize",display:"flex",alignItems:"center",justifyContent:"center",background:"transparent",position:"relative",zIndex:5,userSelect:"none"}}>
             <div style={{width:2,height:"100%",background:t.BDR}}/>
           </div>
-          <ChatCenter circuit={circuit} setCircuit={setCircuit} activeSources={activeSources} activeTutorial={activeTutorial} activeLessonIdx={activeLessonIdx} onNextLesson={handleNextLesson} onPrevLesson={handlePrevLesson} onQuiz={handleQuiz} chatPrompt={chatPrompt} onSaveMsg={handleSaveMsg} onUnsaveMsg={handleUnsaveMsg} savedIds={savedMsgs.map(function(m){return m.id;})} onAddCircuit={function(rows,note){handleAddCircuitSource(note||("채팅 회로 "+(savedCircuits.length+1)),rows,{type:"ai"});}} onQuizScore={handleQuizScore} chatMode={chatMode} onExitSearchMode={function(){setChatMode("normal");}} onAddSource={function(src){setSources(function(p){var exists=p.find(function(x){return x.id===src.id;});return exists?p:p.concat([src]);});}} msgs={chatMsgs} setMsgs={setChatMsgs} onSetCircuitSource={setCircuitSource} locateMsgId={locateMsgId} onClearLocate={function(){setLocateMsgId(null);}}/>
+          <ChatCenter circuit={circuit} setCircuit={setCircuit} activeSources={activeSources} activeTutorial={activeTutorial} activeLessonIdx={activeLessonIdx} onNextLesson={handleNextLesson} onPrevLesson={handlePrevLesson} onQuiz={handleQuiz} chatPrompt={chatPrompt} onSaveMsg={handleSaveMsg} onUnsaveMsg={handleUnsaveMsg} savedIds={savedMsgs.map(function(m){return m.id;})} onAddCircuit={function(rows,note){handleAddCircuitSource(note||("채팅 회로 "+(savedCircuits.length+1)),rows,{type:"ai"});}} onQuizScore={handleQuizScore} chatMode={chatMode} onExitSearchMode={function(){setChatMode("normal");}} onAddSource={function(src){setSources(function(p){var exists=p.find(function(x){return x.id===src.id;});return exists?p:p.concat([src]);});}} msgs={chatMsgs} setMsgs={setChatMsgs} onSetCircuitSource={setCircuitSource}/>
           {/* Center↔Right drag handle */}
           <div onMouseDown={dragRight} style={{width:6,flexShrink:0,cursor:"col-resize",display:"flex",alignItems:"center",justifyContent:"center",background:"transparent",position:"relative",zIndex:5,userSelect:"none"}}>
             <div style={{width:2,height:"100%",background:t.BDR}}/>
           </div>
-          <RightCircuit panelWidth={rightW} circuit={circuit} setCircuit={setCircuit} onSubmit={function(){setSubmitOpen(true);}} savedMsgs={savedMsgs} onUnsave={handleUnsaveMsg} onAddNote={handleAddNote} onSaveCircuit={handleAddCircuitSource} circuits={savedCircuits} onDeleteCircuit={handleDeleteCircuit} chatMsgs={chatMsgs} onSaveOutput={handleSaveOutput} simTrigger={simTrigger} onSimTrigger={triggerSim} circuitSource={circuitSource} onSetCircuitSource={setCircuitSource} onLocateMsg={function(id){setLocateMsgId(id);}} onAskChat={function(txt){setChatPrompt({text:txt,ts:Date.now()});}} onShareNote={handleShareNote}/>
+          <RightCircuit panelWidth={rightW} circuit={circuit} setCircuit={setCircuit} onSubmit={function(){setSubmitOpen(true);}} savedMsgs={savedMsgs} onUnsave={handleUnsaveMsg} onAddNote={handleAddNote} onSaveCircuit={handleAddCircuitSource} circuits={savedCircuits} onDeleteCircuit={handleDeleteCircuit} chatMsgs={chatMsgs} onSaveOutput={handleSaveOutput} simTrigger={simTrigger} onSimTrigger={triggerSim} circuitSource={circuitSource} onSetCircuitSource={setCircuitSource} onAskChat={function(txt){setChatPrompt({text:txt,ts:Date.now()});}} onShareNote={handleShareNote}/>
         </div>
         {submitOpen && <SubmitModal circuit={circuit} onClose={function(){setSubmitOpen(false);}}/>}
       </div>
