@@ -2123,6 +2123,10 @@ function RightCircuit(props) {
   var [savingName, setSavingName] = useState("");
   var [memoPage, setMemoPage] = useState(null);
   var [noteOpen, setNoteOpen] = useState(false);
+  var [noteView, setNoteView] = useState("list");
+  var [noteRef, setNoteRef] = useState([]);
+  var [graphZoom, setGraphZoom] = useState(1);
+  var [graphHover, setGraphHover] = useState(null);
   var [noteText, setNoteText] = useState("");
   var [generating, setGenerating] = useState(null);
   var [pendingAction, setPendingAction] = useState(null);
@@ -2305,7 +2309,7 @@ function RightCircuit(props) {
             var cDep = 0; if(c.circuit) c.circuit[0].forEach(function(cell,i){if(c.circuit.some(function(r){return !!r[i];}))cDep=i+1;});
             var usedQ = c.circuit ? c.circuit.filter(function(r){return r.some(Boolean);}).length : 0;
             return (
-              <div key={c.id} onClick={function(){setCircuit(c.circuit);setEditingTitle(c.title);setEditingCircuitId(c.id);setRightPage("editor");onSimTrigger();if(onSetCircuitSource&&c.source)onSetCircuitSource(c.source);}} style={{background:t.isDark?t.CARD:"transparent",border:"1px solid "+t.BDR,borderRadius:10,padding:"10px 12px",cursor:"pointer",display:"flex",flexDirection:"column",gap:6,transition:"border-color .15s",marginBottom:1}}>
+              <div key={c.id} onClick={function(){setCircuit(c.circuit);setEditingTitle(c.title);setEditingCircuitId(c.id);setRightPage("editor");onSimTrigger();if(onSetCircuitSource&&c.source)onSetCircuitSource(c.source);}} style={{background:t.isDark?t.CARD:"transparent",border:"1px solid "+t.BDR,borderRadius:10,padding:"10px 12px",cursor:"pointer",display:"flex",flexDirection:"column",gap:3,transition:"border-color .15s",marginBottom:1}}>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
                   <span style={{fontSize:14,flexShrink:0}}>⚛</span>
                   <span style={{flex:1,color:t.T1,fontSize:12,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{c.title}</span>
@@ -2320,7 +2324,7 @@ function RightCircuit(props) {
                   <span style={{color:t.T3,fontSize:11,flexShrink:0}}>›</span>
                 </div>
                 {c.circuit && (
-                  <div style={{display:"flex",flexDirection:"column",gap:2,paddingLeft:22}}>
+                  <div style={{display:"flex",flexDirection:"column",gap:2,paddingLeft:22,marginTop:5}}>
                     {c.circuit.filter(function(row){return row.some(Boolean);}).slice(0,2).map(function(row,q) {
                       return (
                         <div key={q} style={{display:"flex",alignItems:"center",gap:1}}>
@@ -2334,7 +2338,7 @@ function RightCircuit(props) {
                     })}
                   </div>
                 )}
-                <div style={{display:"flex",alignItems:"center",gap:6,paddingLeft:22}}>
+                <div style={{display:"flex",alignItems:"center",gap:6,paddingLeft:22,marginTop:8}}>
                   <span style={{color:t.T3,fontSize:9.5}}>{gc}게이트</span>
                   <span style={{color:t.T3,fontSize:9.5,opacity:.4}}>·</span>
                   <span style={{color:t.T3,fontSize:9.5}}>깊이 {cDep}</span>
@@ -2496,10 +2500,26 @@ function RightCircuit(props) {
           <div style={{padding:"0 12px",minHeight:40,display:"flex",alignItems:"center",gap:8,flexShrink:0,borderBottom:"1px solid "+t.BDR}}>
             <button onClick={function(){setNoteOpen(false);setNoteText("");}} style={{background:"transparent",border:"none",color:t.ACC,fontSize:12,cursor:"pointer",padding:0,fontWeight:600,display:"flex",alignItems:"center",gap:3}}>← 뒤로</button>
             <span style={{flex:1}}/>
-            <button onClick={function(){if(onAddNote&&noteText.trim()){onAddNote(noteText);setNoteText("");setNoteOpen(false);}}} disabled={!noteText.trim()} style={{background:"transparent",border:"none",color:noteText.trim()?t.ACC:t.T3,fontSize:12,cursor:noteText.trim()?"pointer":"default",padding:0,fontWeight:600,opacity:noteText.trim()?1:0.4,transition:"opacity .15s"}}>저장</button>
+            <button onClick={function(){if(onAddNote&&noteText.trim()){onAddNote(noteText,noteRef);setNoteText("");setNoteRef([]);setNoteOpen(false);}}} disabled={!noteText.trim()} style={{background:"transparent",border:"none",color:noteText.trim()?t.ACC:t.T3,fontSize:12,cursor:noteText.trim()?"pointer":"default",padding:0,fontWeight:600,opacity:noteText.trim()?1:0.4,transition:"opacity .15s"}}>저장</button>
           </div>
           <div style={{flex:1,padding:"12px 10px",display:"flex",flexDirection:"column",gap:8}}>
-            <textarea autoFocus value={noteText} onChange={function(e){setNoteText(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter"&&e.metaKey){e.preventDefault();if(onAddNote&&noteText.trim()){onAddNote(noteText);setNoteText("");setNoteOpen(false);}}}} placeholder="메모 작성..." style={{flex:1,width:"100%",background:t.isDark?t.BG:t.CARDH,border:"1px solid "+(noteText.trim()?t.BDRH:t.BDR),borderRadius:8,color:t.T1,padding:"10px 12px",fontSize:12,outline:"none",resize:"none",fontFamily:"inherit",lineHeight:1.7,boxSizing:"border-box"}}/>
+            <textarea autoFocus value={noteText} onChange={function(e){setNoteText(e.target.value);}} onKeyDown={function(e){if(e.key==="Enter"&&e.metaKey){e.preventDefault();if(onAddNote&&noteText.trim()){onAddNote(noteText,noteRef);setNoteText("");setNoteRef([]);setNoteOpen(false);}}}} placeholder="메모 작성..." style={{flex:1,width:"100%",background:t.isDark?t.BG:t.CARDH,border:"1px solid "+(noteText.trim()?t.BDRH:t.BDR),borderRadius:8,color:t.T1,padding:"10px 12px",fontSize:12,outline:"none",resize:"none",fontFamily:"inherit",lineHeight:1.7,boxSizing:"border-box"}}/>
+            {/* Reference selector */}
+            <div style={{flexShrink:0,display:"flex",flexDirection:"column",gap:6}}>
+              <div style={{display:"flex",alignItems:"center",gap:6}}>
+                <span style={{color:t.T3,fontSize:10,fontWeight:600}}>🔗 참조</span>
+                <button onClick={function(){setNoteRef(function(r){return r.indexOf("전체 대화")>=0?r.filter(function(x){return x!=="전체 대화";}):r.concat(["전체 대화"]);});}} style={{padding:"2px 8px",borderRadius:5,border:"1px solid "+(noteRef.indexOf("전체 대화")>=0?t.ACC+"55":t.BDR),background:noteRef.indexOf("전체 대화")>=0?t.ACC+"12":"transparent",color:noteRef.indexOf("전체 대화")>=0?t.ACC:t.T3,fontSize:10,fontWeight:600,cursor:"pointer"}}>전체 대화</button>
+              </div>
+              {circuits.length>0 && (
+                <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+                  {circuits.map(function(c){
+                    var key="⚛ "+c.title;
+                    var sel=noteRef.indexOf(key)>=0;
+                    return <button key={c.id} onClick={function(){setNoteRef(function(r){return sel?r.filter(function(x){return x!==key;}):r.concat([key]);});}} style={{padding:"2px 8px",borderRadius:5,border:"1px solid "+(sel?t.ACC+"55":t.BDR),background:sel?t.ACC+"12":"transparent",color:sel?t.ACC:t.T3,fontSize:10,fontWeight:600,cursor:"pointer",maxWidth:120,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>⚛ {c.title}</button>;
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
@@ -2521,7 +2541,7 @@ function RightCircuit(props) {
               <span style={{color:t.T1,fontWeight:700,fontSize:12}}>내 노트</span>
               {savedMsgs.length>0 && <span style={{background:t.PUR+"18",border:"1px solid "+t.PUR+"44",color:t.PUR,padding:"1px 7px",borderRadius:10,fontSize:10,fontWeight:700}}>{savedMsgs.length}</span>}
               <span style={{flex:1}}/>
-              <button onClick={function(){setNoteOpen(true);setNoteText("");setPendingAction(null);}} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"0 10px",borderRadius:7,fontSize:10.5,fontWeight:500,cursor:"pointer",height:20}}>+ 메모 작성</button>
+              <button onClick={function(){setNoteOpen(true);setNoteText("");setPendingAction(null);}} style={{background:"linear-gradient(135deg,"+t.ACC+","+t.PUR+")",color:"#fff",border:"none",padding:"4px 12px",borderRadius:7,fontSize:11.5,fontWeight:600,cursor:"pointer"}}>+ 메모 작성</button>
             </>
           )}
         </div>
@@ -2587,6 +2607,95 @@ function RightCircuit(props) {
             </div>
           </div>
 
+        {/* View toggle */}
+        <div style={{display:"flex",justifyContent:"center",padding:"6px 12px",flexShrink:0}}>
+          <div style={{display:"flex",background:t.isDark?t.BG:t.CARDH,borderRadius:8,padding:2,gap:2}}>
+            <button onClick={function(){setNoteView("list");}} style={{padding:"3px 14px",borderRadius:6,border:"none",fontSize:11,fontWeight:noteView==="list"?700:400,cursor:"pointer",background:noteView==="list"?t.SURF:"transparent",color:noteView==="list"?t.ACC:t.T2,transition:"all .18s",display:"flex",alignItems:"center",gap:3}}><span style={{lineHeight:1,display:"flex",alignItems:"center"}}>☰</span> 목록</button>
+            <button onClick={function(){setNoteView("graph");}} style={{padding:"3px 14px",borderRadius:6,border:"none",fontSize:11,fontWeight:noteView==="graph"?700:400,cursor:"pointer",background:noteView==="graph"?t.SURF:"transparent",color:noteView==="graph"?t.PUR:t.T2,transition:"all .18s",display:"flex",alignItems:"center",gap:3}}><span style={{lineHeight:1,display:"flex",alignItems:"center"}}>⚯</span> 지식 그래프</button>
+          </div>
+        </div>
+
+        {/* Knowledge Graph View */}
+        {noteView==="graph" && !pendingAction && (
+          <div style={{flex:1,overflow:"hidden",padding:"10px 8px 8px",position:"relative"}}>
+            {(function(){
+              var TYPE_C={"note":t.GRN,"ai-msg":t.PUR,"summary":t.ACC,"glossary":t.AMB,"mindmap":t.PUR,"circuit-analysis":t.GRN,"circuit-compare":t.PUR,"experiment":t.RED};
+              var TYPE_ICON={"note":"✏️","ai-msg":"🔖","summary":"📝","glossary":"📖","mindmap":"🗺️","circuit-analysis":"🔬","circuit-compare":"📊","experiment":"📋"};
+              var W=310, H=240;
+              var hubSet={};
+              savedMsgs.forEach(function(n){if(!n.basis)return;n.basis.split(" · ").forEach(function(b){b=b.trim();if(b)hubSet[b]=true;});});
+              var hubNames=Object.keys(hubSet);
+              var cx=W/2, cy=H/2, hr=75;
+              var hubPos={};
+              hubNames.forEach(function(h,i){var a=(i/hubNames.length)*2*Math.PI-Math.PI/2;hubPos[h]={x:cx+hr*Math.cos(a),y:cy+hr*Math.sin(a)};});
+              var basisGroups={};
+              savedMsgs.forEach(function(n){var primary=n.basis?n.basis.split(" · ")[0].trim():"__standalone__";if(!basisGroups[primary])basisGroups[primary]=[];basisGroups[primary].push(n);});
+              var nodePos={};
+              Object.keys(basisGroups).forEach(function(basis){
+                var group=basisGroups[basis];
+                var center=hubPos[basis]||{x:W-22,y:22};
+                group.forEach(function(n,i){var a=(i/group.length)*2*Math.PI-Math.PI/2;var r=40;nodePos[n.id]={x:Math.max(14,Math.min(W-14,center.x+r*Math.cos(a))),y:Math.max(14,Math.min(H-14,center.y+r*Math.sin(a)))};});
+              });
+              var edges=[];
+              savedMsgs.forEach(function(n){if(!n.basis||!nodePos[n.id])return;n.basis.split(" · ").forEach(function(b){b=b.trim();if(hubPos[b])edges.push({from:nodePos[n.id],to:hubPos[b],clr:TYPE_C[n.type]||t.T3});});});
+              var vbX=W/2*(1-1/graphZoom), vbY=H/2*(1-1/graphZoom), vbW=W/graphZoom, vbH=H/graphZoom;
+              return (
+                <>
+                  <svg viewBox={vbX+" "+vbY+" "+vbW+" "+vbH} style={{width:"100%",height:"100%",display:"block"}}>
+                    {edges.map(function(e,i){return <line key={i} x1={e.from.x} y1={e.from.y} x2={e.to.x} y2={e.to.y} stroke={e.clr} strokeWidth={1.2} strokeOpacity={0.25}/>;} )}
+                    {hubNames.map(function(h){
+                      var pos=hubPos[h];
+                      var isChat=h==="전체 대화";
+                      var label=h.replace("⚛ ","");
+                      var words=label.split(" ");
+                      return (
+                        <g key={h} onMouseEnter={function(){setGraphHover({label:h,x:pos.x,y:pos.y});}} onMouseLeave={function(){setGraphHover(null);}}>
+                          <circle cx={pos.x} cy={pos.y} r={20} fill={isChat?t.ACC+"1A":t.isDark?"#1a2a4a":"#e8edf8"} stroke={isChat?t.ACC:t.T3} strokeWidth={1.5} strokeDasharray={isChat?"none":"4 2"}/>
+                          {words.slice(0,2).map(function(w,wi){return <text key={wi} x={pos.x} y={pos.y+(wi-(words.slice(0,2).length-1)/2)*8} textAnchor="middle" dominantBaseline="middle" fill={isChat?t.ACC:t.T2} fontSize={6.5} fontWeight={600}>{w.length>5?w.slice(0,5)+"…":w}</text>;})}
+                        </g>
+                      );
+                    })}
+                    {savedMsgs.map(function(n){
+                      var pos=nodePos[n.id];
+                      if(!pos)return null;
+                      var clr=TYPE_C[n.type]||t.T3;
+                      var icon=TYPE_ICON[n.type]||"📄";
+                      var isHov=graphHover&&graphHover.label===n.id;
+                      return (
+                        <g key={n.id}
+                          onClick={function(){setMemoPage(n);}}
+                          onMouseEnter={function(){setGraphHover({label:n.title||n.id,x:pos.x,y:pos.y,isNode:true});}}
+                          onMouseLeave={function(){setGraphHover(null);}}
+                          style={{cursor:"pointer"}}>
+                          <circle cx={pos.x} cy={pos.y} r={13} fill={clr+"1E"} stroke={clr} strokeWidth={1.5}/>
+                          <text x={pos.x} y={pos.y+1} textAnchor="middle" dominantBaseline="middle" fontSize={10}>{icon}</text>
+                        </g>
+                      );
+                    })}
+                    {graphHover && (function(){
+                      var px=graphHover.x, py=graphHover.y;
+                      var lbl=graphHover.label;
+                      var maxW=Math.min(lbl.length*5.5+16, 120);
+                      var bx=px-maxW/2, by=py-32;
+                      return (
+                        <g style={{pointerEvents:"none"}}>
+                          <rect x={bx} y={by} width={maxW} height={17} rx={4} fill={t.isDark?t.CARD:"#fff"} stroke={t.BDR} strokeWidth={0.8} opacity={0.95}/>
+                          <text x={px} y={by+9} textAnchor="middle" dominantBaseline="middle" fill={t.T1} fontSize={7.5} fontWeight={600}>{lbl.length>18?lbl.slice(0,17)+"…":lbl}</text>
+                        </g>
+                      );
+                    })()}
+                  </svg>
+                  {/* Zoom controls */}
+                  <div style={{position:"absolute",bottom:12,right:12,display:"flex",flexDirection:"column",gap:3}}>
+                    <button onClick={function(){setGraphZoom(function(z){return Math.min(z+0.3,3);});}} style={{width:22,height:22,borderRadius:5,border:"1px solid "+t.BDR,background:t.isDark?t.CARD:"#fff",color:t.T2,fontSize:14,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",padding:0,lineHeight:1}}>+</button>
+                    <button onClick={function(){setGraphZoom(function(z){return Math.max(z-0.3,0.5);});}} style={{width:22,height:22,borderRadius:5,border:"1px solid "+t.BDR,background:t.isDark?t.CARD:"#fff",color:t.T2,fontSize:14,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",padding:0,lineHeight:1}}>−</button>
+                  </div>
+                </>
+              );
+            })()}
+          </div>
+        )}
+
         {/* generating indicator */}
         {generating && (
           <div style={{flexShrink:0,padding:"6px 12px",background:t.ACC+"0A",borderBottom:"1px solid "+t.ACC+"22",display:"flex",alignItems:"center",gap:8}}>
@@ -2596,7 +2705,7 @@ function RightCircuit(props) {
         )}
 
         {/* Card list */}
-        <div style={{flex:1,overflowY:"auto",padding:14,display:"flex",flexDirection:"column",gap:8}}>
+        {noteView==="list" && <div style={{flex:1,overflowY:"auto",padding:"0 14px 14px",display:"flex",flexDirection:"column",gap:8}}>
           {savedMsgs.length===0 ? (
             <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%",gap:10}}>
               <div style={{fontSize:32,opacity:.3}}>✦</div>
@@ -2617,25 +2726,25 @@ function RightCircuit(props) {
             var cleanText=msg.content.replace(/\*\*/g,"").replace(/#+\s/g,"").trim();
             var displayTitle=msg.title||meta.label;
             return (
-              <div key={msg.id} onClick={function(){setMemoPage(msg);}} style={{background:t.isDark?t.CARD:"transparent",border:"1px solid "+t.BDR,borderRadius:10,padding:"10px 12px",cursor:"pointer",display:"flex",flexDirection:"column",gap:6,transition:"border-color .15s",marginBottom:1}}>
+              <div key={msg.id} onClick={function(){setMemoPage(msg);}} style={{background:t.isDark?t.CARD:"transparent",border:"1px solid "+t.BDR,borderRadius:10,padding:"10px 12px",cursor:"pointer",display:"flex",flexDirection:"column",gap:3,transition:"border-color .15s",marginBottom:1}}>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
                   <span style={{fontSize:14,flexShrink:0}}>{meta.icon}</span>
                   <span style={{flex:1,color:t.T1,fontSize:12,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{displayTitle}</span>
                   <span style={{background:meta.clr+"12",border:"1px solid "+meta.clr+"33",color:meta.clr,padding:"1px 6px",borderRadius:5,fontSize:9,fontWeight:600,flexShrink:0}}>{meta.label}</span>
                   <span style={{color:t.T3,fontSize:11,flexShrink:0}}>›</span>
                 </div>
-                <p style={{color:t.T2,fontSize:11,lineHeight:1.6,margin:0,paddingLeft:22,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{cleanText}</p>
+                <p style={{color:t.T2,fontSize:11,lineHeight:1.6,margin:0,paddingLeft:22,display:"-webkit-box",WebkitLineClamp:1,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{cleanText}</p>
                 <div style={{display:"flex",alignItems:"center",gap:6,paddingLeft:22}}>
                   {msg.basis && <>
-                    <span style={{color:t.T3,fontSize:9.5,flex:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{msg.basis}</span>
+                    <span style={{color:t.T3,fontSize:9.5,flex:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",display:"flex",alignItems:"center",gap:3}}><span>🔗</span>{msg.basis}</span>
                   </>}
-                  {!msg.basis && <span style={{flex:1}}/>}
+                  {!msg.basis && <span style={{color:t.T3,fontSize:9.5,flex:1,opacity:.5}}>🔗 없음</span>}
                   {msg.time && <span style={{color:t.T3,fontSize:9.5,flexShrink:0}}>{msg.date?msg.date+" ":""}{msg.time}</span>}
                 </div>
               </div>
             );
           })}
-        </div>
+        </div>}
         </div>
       )}
       </div>
@@ -2883,9 +2992,17 @@ export default function App() {
   var [submitOpen, setSubmitOpen] = useState(false);
   var [chatPrompt, setChatPrompt] = useState(null);
   var [savedMsgs, setSavedMsgs] = useState([
-    { id:"memo1", type:"ai-msg",   title:"H 게이트와 CNOT으로 만드는 최대 얽힘", date:"2026.08.20", time:"09:30", basis:"09:30 · Bell 상태 얽힘 원리 설명 응답", content:"Bell 상태에서 H 게이트는 q[0]을 |0⟩에서 (|0⟩+|1⟩)/√2 중첩 상태로 만들고, CNOT은 이 중첩을 q[1]로 전파해 최대 얽힘 상태 |Φ+⟩를 형성합니다. 측정하면 반드시 |00⟩ 또는 |11⟩만 나와요." },
-    { id:"memo2", type:"summary",  title:"Grover 알고리즘 학습 핵심 정리", date:"2026.08.20", time:"10:05", basis:"전체 대화", content:"**Grover 알고리즘 학습 핵심 정리**\n• Grover 알고리즘의 O(√N) 검색 원리 학습\n• 최적 반복 횟수 π/4 × √N 확인\n• 오라클과 디퓨저의 역할 구분" },
-    { id:"memo3", type:"circuit-analysis", title:"Bell 상태 회로의 얽힘 생성 메커니즘", date:"2026.08.19", time:"11:20", basis:"⚛ Bell 상태 실습", content:"**Bell 상태 회로의 얽힘 생성 메커니즘**\nH 게이트로 q[0]을 중첩 후 CNOT으로 q[1]과 얽음. 최종 상태 |Φ+⟩ = (|00⟩+|11⟩)/√2. 측정 시 50:50으로 |00⟩ 또는 |11⟩만 관측됨. 위상 킥백 없이 최소 게이트로 최대 얽힘 달성." },
+    { id:"memo1",  type:"ai-msg",  date:"2026.08.20",           title:"H 게이트와 CNOT으로 만드는 최대 얽힘",     time:"09:30", basis:"⚛ Bell 상태 실습",                                         content:"Bell 상태에서 H 게이트는 q[0]을 |0⟩에서 (|0⟩+|1⟩)/√2 중첩 상태로 만들고, CNOT은 이 중첩을 q[1]로 전파해 최대 얽힘 상태 |Φ+⟩를 형성합니다. 측정하면 반드시 |00⟩ 또는 |11⟩만 나와요." },
+    { id:"memo2",  type:"summary",  date:"2026.08.20",           title:"양자 컴퓨팅 입문 학습 핵심 정리",          time:"10:05", basis:"전체 대화",                                                  content:"**양자 컴퓨팅 입문 학습 핵심 정리**\n• 중첩(Superposition)과 얽힘(Entanglement) 개념 학습\n• H·X·CNOT 게이트의 역할과 조합 방식 이해\n• Bell 상태 및 GHZ 상태 회로 구현 실습\n• 측정과 파동함수 붕괴의 확률적 해석 확인\n• 양자 우월성의 핵심인 병렬 연산 원리 파악" },
+    { id:"memo3",  type:"circuit-analysis",  date:"2026.08.20", title:"Bell 상태 회로의 얽힘 생성 메커니즘",      time:"11:20", basis:"⚛ Bell 상태 실습",                                         content:"**Bell 상태 회로의 얽힘 생성 메커니즘**\nH 게이트로 q[0]을 중첩 후 CNOT으로 q[1]과 얽음. 최종 상태 |Φ+⟩=(|00⟩+|11⟩)/√2. 측정 시 50:50으로 |00⟩ 또는 |11⟩만 관측됨. 위상 킥백 없이 최소 게이트로 최대 얽힘 달성." },
+    { id:"memo4",  type:"circuit-analysis",  date:"2026.08.20", title:"Grover 오라클 및 디퓨저 회로 분석",        time:"13:10", basis:"⚛ Grover 탐색 알고리즘",                                    content:"**Grover 오라클 및 디퓨저 회로 분석**\n오라클: 목표 상태의 위상을 π 뒤집어 표식. 디퓨저: 평균에 대한 반전(Inversion about mean)으로 목표 진폭 증폭. 반복 횟수 k ≈ π/4·√N 이상이면 확률 감소. 3큐비트 예시에서 정확히 2회 반복이 최적." },
+    { id:"memo5",  type:"circuit-compare",  date:"2026.08.20",   title:"Bell vs Grover 회로 구조 비교",            time:"13:45", basis:"⚛ Bell 상태 실습 · ⚛ Grover 탐색 알고리즘",               content:"**Bell vs Grover 회로 구조 비교**\n| 항목 | Bell | Grover |\n|------|------|--------|\n| 목적 | 얽힘 생성 | 탐색 가속 |\n| 게이트 수 | 2 | O(√N) 반복 |\n| 출력 | 최대 얽힘 | 목표 상태 진폭 증폭 |\nBell은 단순 얽힘, Grover는 반복 증폭 구조." },
+    { id:"memo6",  type:"mindmap",  date:"2026.08.20",           title:"양자 컴퓨팅 핵심 개념 마인드맵",           time:"14:00", basis:"전체 대화",                                                  content:"## 양자 컴퓨팅 핵심 개념\n양자 상태\n  중첩 (Superposition)\n    H 게이트 적용\n    |0⟩+|1⟩ → 측정 시 확률적 붕괴\n  얽힘 (Entanglement)\n    Bell 상태\n    GHZ 상태\n양자 게이트\n  단일 큐비트: H, X, Z, Y, S, T\n  2큐비트: CNOT, CZ, SWAP\n양자 알고리즘\n  Grover: O(√N) 탐색\n  Shor: 소인수 분해\n  QFT: 양자 푸리에 변환" },
+    { id:"memo7",  type:"glossary",  date:"2026.08.20",          title:"양자 컴퓨팅 핵심 용어 정리",              time:"14:30", basis:"전체 대화",                                                  content:"**큐비트(Qubit)**: 양자 정보의 기본 단위. |0⟩과 |1⟩의 중첩 가능\n**중첩(Superposition)**: 측정 전 |0⟩과 |1⟩ 동시 존재 상태\n**얽힘(Entanglement)**: 두 큐비트가 비국소적으로 상관된 상태\n**게이트(Gate)**: 큐비트에 작용하는 유니터리 연산\n**측정(Measurement)**: 양자 상태를 고전 비트로 붕괴\n**파동함수 붕괴**: 측정 시 중첩이 확률적으로 결정됨\n**위상 킥백(Phase Kickback)**: 제어 큐비트에 위상이 반사되는 현상" },
+    { id:"memo8",  type:"circuit-analysis",  date:"2026.08.20", title:"QFT 3큐비트 위상 회전 분석",              time:"15:00", basis:"⚛ QFT 3큐비트",                                            content:"**QFT 3큐비트 위상 회전 분석**\nH 게이트로 각 큐비트를 중첩 후 제어 위상 회전 R_k 적용. k번째 큐비트에 2π/2^k 위상 부여. SWAP으로 비트 역순 정렬. 총 게이트 수: O(n²). 3큐비트 기준 H×3 + R2×2 + R3×1 + SWAP×1 구성." },
+    { id:"memo9",  type:"experiment",  date:"2026.08.20",        title:"QFT 구현 및 역변환 실험 보고서",           time:"15:30", basis:"⚛ QFT 3큐비트 · ⚛ Grover 탐색 알고리즘",                 content:"**QFT 구현 및 역변환 실험 보고서**\n\n목적: QFT와 역QFT의 정확성 검증\n방법: |5⟩ 입력 → QFT → 역QFT → 측정\n결과: 99.8% 확률로 |5⟩ 복원 성공\n고찰: 게이트 오차 누적이 정밀도에 영향. Grover와 QFT 결합 시 위상 추정 알고리즘 구현 가능성 확인." },
+    { id:"memo10", type:"circuit-compare",  date:"2026.08.20",   title:"Grover vs QFT 알고리즘 회로 구조 비교",   time:"16:00", basis:"⚛ Grover 탐색 알고리즘 · ⚛ QFT 3큐비트",                 content:"**Grover vs QFT 알고리즘 회로 구조 비교**\n| 항목 | Grover | QFT |\n|------|--------|-----|\n| 구조 | 반복 블록 | 계층적 위상 회전 |\n| 깊이 | O(√N) | O(n²) |\n| 활용 | 비정렬 탐색 | 주파수 분석·위상 추정 |\nGrover는 진폭 증폭, QFT는 위상 정보 추출에 특화." },
+    { id:"memo11", type:"note",  date:"2026.08.20",              title:"학습 중 떠오른 아이디어 메모",             time:"16:30", basis:"⚛ Grover 탐색 알고리즘",                                                         content:"양자 컴퓨팅과 금융 최적화 연결 가능성 — 포트폴리오 최적화 문제에 QAOA 적용 가능? Grover를 활용한 데이터베이스 탐색이 실제 금융 데이터에 어떻게 작동할지 다음 세션에서 탐구해보자." },
   ]);
   var [quizResults, setQuizResults] = useState({
     "bell_0": {
@@ -2948,12 +3065,14 @@ export default function App() {
     document.addEventListener('mousemove',mv);
     document.addEventListener('mouseup',up);
   }
-  function handleAddNote(text) {
+  function handleAddNote(text, refs) {
     if (!text.trim()) return;
     var now = new Date();
     var hhmm = now.getHours().toString().padStart(2,"0")+":"+now.getMinutes().toString().padStart(2,"0");
+    var dateStr = now.getFullYear()+"."+(now.getMonth()+1).toString().padStart(2,"0")+"."+now.getDate().toString().padStart(2,"0");
+    var basis = (refs&&refs.length>0) ? refs.join(" · ") : null;
     setSavedMsgs(function(p) {
-      return [{id:"note_"+Date.now(), type:"note", content:text, time:hhmm}].concat(p);
+      return [{id:"note_"+Date.now(), type:"note", content:text, time:hhmm, date:dateStr, basis:basis}].concat(p);
     });
   }
   function handleSaveMsg(msg) {
