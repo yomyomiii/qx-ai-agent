@@ -3156,30 +3156,7 @@ export default function App() {
             <div style={{fontSize:14,fontWeight:800,letterSpacing:"-.03em",color:t.T1}}>QX Platform</div>
           </div>
 
-          {/* Active context pill */}
-          <div style={{flex:1,display:"flex",alignItems:"center",gap:6,paddingLeft:8}}>
-            {activeTutorial && (
-              <div style={{display:"flex",alignItems:"center",gap:6,background:t.PUR+"18",border:"1px solid "+t.PUR+"44",borderRadius:20,padding:"3px 12px 3px 8px"}}>
-                <span style={{fontSize:11}}>📚</span>
-                <span style={{color:t.PUR,fontSize:11.5,fontWeight:600}}>{activeTutorial.title}</span>
-                {activeLessonIdx!==null && (
-                  <span style={{color:t.T3,fontSize:10}}>레슨 {activeLessonIdx+1}</span>
-                )}
-              </div>
-            )}
-            {activeSources.length>0 && (
-              <div style={{display:"flex",alignItems:"center",gap:4}}>
-                {activeSources.slice(0,2).map(function(s) {
-                  return (
-                    <span key={s.id} style={{background:t.ACC+"18",border:"1px solid "+t.ACC+"44",borderRadius:20,padding:"3px 10px",fontSize:11,color:t.ACC,fontWeight:500}}>
-                      {s.type==="doc"?"📄":"⚛"} {s.title.length>14?s.title.slice(0,14)+"…":s.title}
-                    </span>
-                  );
-                })}
-                {activeSources.length>2 && <span style={{color:t.T3,fontSize:11}}>+{activeSources.length-2}</span>}
-              </div>
-            )}
-          </div>
+          <div style={{flex:1}}/>
 
           {/* Right controls */}
           <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
